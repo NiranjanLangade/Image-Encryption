@@ -1,7 +1,6 @@
-from __future__ import division
 from PIL import Image
-from random import randint
 from collections import deque
+
 
 def rubics_operation(image, k):
     j = 0
@@ -14,7 +13,7 @@ def rubics_operation(image, k):
             x.rotate(k)
 
         image[j] = list(x)
-        j +=1
+        j += 1
 
     return image
 
@@ -34,7 +33,6 @@ def row_col_inversion(image):
 
 
 def xor_operation(image, k):
-
     i = 1
     for row in image:
         if i % 2 == 0:
@@ -52,9 +50,9 @@ def xor_operation(image, k):
 
     return image
 
+
 def imgDecrypt(file_name, iterations, kr, kc):
-    #file_name = input("enter the file name to be decrypt:\t")
-    im = Image.open("enc_result/"+file_name)
+    im = Image.open("enc_result/" + file_name)
     pixels = list(im.getdata())
     grey_image1 = list()
     for pix in pixels:
@@ -67,12 +65,8 @@ def imgDecrypt(file_name, iterations, kr, kc):
         sp = fp
         grey_image2.append(x)
 
-    #itr = int(input("enter the no of iterations :\t"))
     itr = iterations
     i = 0
-    #kr = int(input("kr : "))
-    #kc = int(input("kc : "))
-
 
     while i < itr:
         i += 1
@@ -85,7 +79,6 @@ def imgDecrypt(file_name, iterations, kr, kc):
         grey_image2 = row_col_inversion(grey_image2)
         grey_image2 = rubics_operation(grey_image2, kr)
 
-
     grey_image3 = list()
     for row in grey_image2:
         for pix in row:
@@ -97,7 +90,7 @@ def imgDecrypt(file_name, iterations, kr, kc):
         x = (pix, pix, pix)
         grey_image4.append(x)
 
-# generating the output
+    # generating the output
 
     x, y = im.size
     im2 = Image.new("RGB", (x, y))

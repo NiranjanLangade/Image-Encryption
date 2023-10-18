@@ -1,4 +1,3 @@
-from __future__ import division         # change the / operator to mean true division throughout the module.  always floating point result
 from PIL import Image
 from random import randint
 from collections import deque
@@ -9,14 +8,14 @@ def rubics_operation(image, k):
     j = 0
     while j < len(image):
         sum_pix = sum(image[j])
-        x = deque(image[j])                     #adding and removing elements from either end
+        x = deque(image[j])
         if sum_pix % 2 == 0:
             x.rotate(k)
         else:
             x.rotate(-k)
 
         image[j] = list(x)
-        j +=1
+        j += 1
 
     return image
 
@@ -52,12 +51,13 @@ def xor_operation(image, k):
     i += 1
 
     return image
-    
-def send_email(email, kr, kc, itr):
-    email_adderss = 'niranjanlangade45@gmail.com'
-    email_password = 'inqn sldq znah cwzy'
 
-    with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+
+def send_email(email, kr, kc, itr):
+    email_adderss = "niranjanlangade45@gmail.com"
+    email_password = "inqn sldq znah cwzy"
+
+    with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
         smtp.ehlo()
         smtp.starttls()
         smtp.ehlo()
@@ -65,16 +65,22 @@ def send_email(email, kr, kc, itr):
         smtp.login(email_adderss, email_password)
 
         subject = "Image Encryption"
-        body = 'Image encrypted successfully! kr = ', kr, ' kc = ', kc, 'Number of Iterations = ', itr
+        body = (
+            "Image encrypted successfully! kr = ",
+            kr,
+            " kc = ",
+            kc,
+            "Number of Iterations = ",
+            itr,
+        )
 
-        msg = f'Subject: {subject}\n\n{body}'
+        msg = f"Subject: {subject}\n\n{body}"
 
-        smtp.sendmail(email_adderss, email, msg)    
+        smtp.sendmail(email_adderss, email, msg)
 
 
 def inputImg(file_name, itr, email):
-    #file_name = input("enter the file name to be encrypt:\t")
-    im = Image.open(file_name)          #image details
+    im = Image.open(file_name)  # image details
     pixels = list(im.getdata())
     grey_image1 = list()
     for pix in pixels:
@@ -82,21 +88,18 @@ def inputImg(file_name, itr, email):
     grey_image2 = list()
     sp = 0
     for rows in range(im.size[1]):
-        fp = sp + im.size[0]            #length or size of list
+        fp = sp + im.size[0]
         x = grey_image1[sp:fp]
         sp = fp
         grey_image2.append(x)
 
-    #itr = int(input("enter the no of iterations :\t"))
     kr = randint(1, 255)
 
     kc = randint(1, 255)
 
     print("random integers are " + str(kr) + " , " + str(kc))
 
-    #email = input("Enter email: ")
     send_email(email, kr, kc, itr)
-
 
     i = 0
 
@@ -111,14 +114,11 @@ def inputImg(file_name, itr, email):
 
         grey_image2 = row_col_inversion(grey_image2)
 
-        grey_image2 = xor_operation(grey_image2 , kr)
+        grey_image2 = xor_operation(grey_image2, kr)
 
         grey_image2 = row_col_inversion(grey_image2)
 
-        grey_image2 = xor_operation(grey_image2 , kc)
-
-
-
+        grey_image2 = xor_operation(grey_image2, kc)
 
     grey_image3 = list()
     for row in grey_image2:
@@ -130,7 +130,6 @@ def inputImg(file_name, itr, email):
     for pix in grey_image3:
         x = (pix, pix, pix)
         grey_image4.append(x)
-    # generating the output
 
     x, y = im.size
     im2 = Image.new("RGB", (x, y))
